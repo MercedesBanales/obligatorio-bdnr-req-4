@@ -13,10 +13,10 @@ const ThreadList = ({ onSelectThread }) => {
   const loadThreads = async () => {
     setLoading(true)
     try {
-      let url = 'http://localhost:3001/api/threads/search?size=30'
+      let url = 'http://localhost:3002/api/threads/search?size=30'
       
       if (filter === 'trending') {
-        url = 'http://localhost:3001/api/threads/trending?limit=30'
+        url = 'http://localhost:3002/api/threads/trending?limit=30'
       } else if (filter === 'recent') {
         url += '&sort=recent'
       }

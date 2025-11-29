@@ -13,7 +13,7 @@ const ThreadDetail = ({ threadId, onBack }) => {
   const loadThreadDetail = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`http://localhost:3001/api/threads/${threadId}`)
+      const response = await fetch(`http://localhost:3002/api/threads/${threadId}`)
       const data = await response.json()
       
       if (data.success) {

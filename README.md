@@ -22,7 +22,7 @@ La plataforma está dividida en **dos subsistemas independientes**:
 
 #### **Subsistema 2: Foros y Comunidad (Elasticsearch)**
 - **Base de datos:** Elasticsearch (búsqueda full-text)
-- **Servidor:** `server-elasticsearch.js` (puerto 3001)
+- **Servidor:** `server-elasticsearch.js` (puerto 3002)
 - **Funcionalidad:** Sistema de foros y comunidad
   - Hilos de discusión por idioma
   - Búsqueda full-text avanzada
@@ -108,13 +108,13 @@ PORT=3000
 
 # Subsistema 2: Elasticsearch (Foros)
 ELASTICSEARCH_URL=http://localhost:9200
-PORT_ES=3001
+PORT_ES=3002
 ```
 
 **⚠️ IMPORTANTE:** 
 - Reemplaza `tu-password-aqui` con la contraseña que configuraste en Neo4j Desktop.
 - El puerto 3000 es para el servidor de Neo4j
-- El puerto 3001 es para el servidor de Elasticsearch
+- El puerto 3002 es para el servidor de Elasticsearch
 
 ---
 
@@ -224,7 +224,7 @@ cd backend
 npm run start:es
 ```
 
-El servidor correrá en **http://localhost:3001**
+El servidor correrá en **http://localhost:3002**
 
 Verás:
 
@@ -232,8 +232,8 @@ Verás:
 ============================================================
 🚀 FOROS Y COMUNIDAD - ELASTICSEARCH
 ============================================================
-📍 Servidor: http://localhost:3001
-🏥 Health:   http://localhost:3001/health
+📍 Servidor: http://localhost:3002
+🏥 Health:   http://localhost:3002/health
 ============================================================
 ```
 
@@ -266,7 +266,7 @@ Abre tu navegador en **http://localhost:5173**
 
 - **Frontend:** http://localhost:5173
 - **Backend Neo4j (Recomendaciones):** http://localhost:3000
-- **Backend Elasticsearch (Foros):** http://localhost:3001
+- **Backend Elasticsearch (Foros):** http://localhost:3002
 - **Elasticsearch API:** http://localhost:9200
 - **Kibana Dashboard:** http://localhost:5601
 
@@ -307,7 +307,7 @@ Base URL: `http://localhost:3000/api`
 
 ### Subsistema 2: Foros y Comunidad (Elasticsearch)
 
-Base URL: `http://localhost:3001/api`
+Base URL: `http://localhost:3002/api`
 
 #### Búsqueda y Exploración
 
@@ -384,32 +384,32 @@ Abre directamente las URLs:
 
 ```bash
 # Buscar todos los hilos
-curl http://localhost:3001/api/threads/search?size=10
+curl http://localhost:3002/api/threads/search?size=10
 
 # Buscar hilos por término
-curl http://localhost:3001/api/threads/search?q=subjuntivo
+curl http://localhost:3002/api/threads/search?q=subjuntivo
 
 # Hilos trending
-curl http://localhost:3001/api/threads/trending?limit=5
+curl http://localhost:3002/api/threads/trending?limit=5
 
 # Obtener un hilo específico
-curl http://localhost:3001/api/threads/t1
+curl http://localhost:3002/api/threads/t1
 
 # Estadísticas por idioma
-curl http://localhost:3001/api/stats/languages
+curl http://localhost:3002/api/stats/languages
 
 # Top tags
-curl http://localhost:3001/api/stats/tags
+curl http://localhost:3002/api/stats/tags
 ```
 
 #### Con el navegador
 
 Abre directamente las URLs:
 
-- http://localhost:3001/api/threads/search?size=10
-- http://localhost:3001/api/threads/trending
-- http://localhost:3001/api/stats/languages
-- http://localhost:3001/api/stats/tags
+- http://localhost:3002/api/threads/search?size=10
+- http://localhost:3002/api/threads/trending
+- http://localhost:3002/api/stats/languages
+- http://localhost:3002/api/stats/tags
 
 ---
 
@@ -460,7 +460,7 @@ obligatorio-req-4/
 │   ├── seed-neo4j.js             # Script para poblar Neo4j
 │   │
 │   └── # Subsistema 2: Foros (Elasticsearch)
-│       ├── server-elasticsearch.js  # Servidor Express para Elasticsearch (puerto 3001)
+│       ├── server-elasticsearch.js  # Servidor Express para Elasticsearch (puerto 3002)
 │       ├── db-elasticsearch.js      # Conexión a Elasticsearch
 │       └── seed-elasticsearch.js    # Script para poblar Elasticsearch
 │
@@ -566,7 +566,7 @@ curl http://localhost:9200/threads/_doc/t1?pretty
 
 Presiona **Ctrl + C** en cada terminal donde corren los servidores:
 - Terminal 1: Servidor Neo4j (puerto 3000)
-- Terminal 2: Servidor Elasticsearch (puerto 3001)
+- Terminal 2: Servidor Elasticsearch (puerto 3002)
 
 ### Detener Elasticsearch y Kibana (Docker)
 
@@ -616,8 +616,8 @@ El puerto ya está ocupado. Verifica qué proceso lo está usando:
 # Para puerto 3000 (Neo4j)
 lsof -i :3000
 
-# Para puerto 3001 (Elasticsearch)
-lsof -i :3001
+# Para puerto 3002 (Elasticsearch)
+lsof -i :3002
 ```
 
 O cambia el puerto en `.env` y actualiza las URLs correspondientes.
@@ -626,10 +626,10 @@ O cambia el puerto en `.env` y actualiza las URLs correspondientes.
 
 1. Asegúrate de que **ambos servidores backend** estén corriendo:
    - Servidor Neo4j en puerto 3000
-   - Servidor Elasticsearch en puerto 3001
+   - Servidor Elasticsearch en puerto 3002
 2. Verifica las URLs en `frontend/src/App.jsx`:
    - `API_NEO4J = 'http://localhost:3000/api'`
-   - Los componentes de foros usan `http://localhost:3001/api`
+   - Los componentes de foros usan `http://localhost:3002/api`
 3. Revisa la consola del navegador (F12) para más detalles
 
 ### La base de datos está vacía

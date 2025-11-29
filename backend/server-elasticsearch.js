@@ -4,7 +4,7 @@ const { esClient, verifyConnection } = require('./db-elasticsearch');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT_ES || 3001;
+const PORT = process.env.PORT_ES || 3002;
 
 app.use(cors());
 app.use(express.json());
