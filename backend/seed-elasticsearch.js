@@ -236,7 +236,10 @@ async function seedPosts(threads) {
     for (let i = 0; i < numReplies; i++) {
       const authorIdx = Math.floor(Math.random() * userNames.length);
       const hoursAfterThread = Math.floor(Math.random() * 48 * (i + 1));
-      const createdDate = new Date(new Date(thread.created_at).getTime() + hoursAfterThread * 60 * 60 * 1000);
+      const createdDate = new Date(
+        new Date(thread.created_at).getTime() + 
+        hoursAfterThread * 60 * 60 * 1000
+      );
       
       const post = {
         post_id: `p${postCounter++}`,

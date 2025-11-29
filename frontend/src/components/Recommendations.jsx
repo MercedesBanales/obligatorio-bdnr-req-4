@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Target, Users, Flame, Network, TrendingUp, UserCircle, AlertCircle, BookOpen } from 'lucide-react'
+import { Target, Users, Flame, Network, TrendingUp, UserCircle, AlertCircle, BookOpen, User } from 'lucide-react'
+import UserProfile from './UserProfile'
 
 const API_URL = '/api'
 
@@ -304,6 +305,14 @@ const Recommendations = ({ user }) => {
           </div>
         )
 
+      case 'profile':
+        return (
+          <UserProfile 
+            userId={user.user_id} 
+            userName={user.name}
+          />
+        )
+
       case 'network':
         const direct = data.network.filter(n => n.distance === 1)
         const indirect = data.network.filter(n => n.distance === 2)
@@ -418,6 +427,14 @@ const Recommendations = ({ user }) => {
           color="bg-blue-500"
         >
           Red de Amigos
+        </TabButton>
+        <TabButton
+          active={activeTab === 'profile'}
+          onClick={() => setActiveTab('profile')}
+          icon={User}
+          color="bg-gray-600"
+        >
+          Perfil
         </TabButton>
       </div>
 
