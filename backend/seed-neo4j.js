@@ -1,4 +1,4 @@
-const { driver } = require('./db');
+const { driver } = require('./db-neo4j');
 
 const courses = ['es_en', 'fr_en', 'de_en'];
 const skillsData = {

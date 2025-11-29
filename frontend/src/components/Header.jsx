@@ -8,12 +8,12 @@ const Header = () => {
           <Network className="w-8 h-8 md:w-10 md:h-10 text-white" />
         </div>
         <h1 className="text-4xl md:text-5xl font-bold text-gray-800">
-          Motor de Recomendaciones
+          Duolingo BDNR
         </h1>
       </div>
       
       <p className="text-gray-600 text-lg md:text-xl">
-        Sistema inteligente de recomendaciones con <span className="font-semibold text-blue-600">Neo4j</span>
+        Plataforma de aprendizaje con <span className="font-semibold text-blue-600">Neo4j</span> y <span className="font-semibold text-green-600">Elasticsearch</span>
       </p>
     </header>
   )

@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { driver, verifyConnection } = require('./db');
+const { driver, verifyConnection } = require('./db-neo4j');
 require('dotenv').config();
 
 const app = express();
@@ -472,7 +472,7 @@ app.get('/api/stats', async (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ 
     status: 'OK', 
-    message: 'Motor de Recomendaciones - Duolingo',
+    message: 'Duolingo BDNR - Plataforma de Aprendizaje',
     timestamp: new Date().toISOString()
   });
 });
