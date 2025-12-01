@@ -203,6 +203,8 @@ El frontend correrá en **http://localhost:5173**
 - **Elasticsearch API:** http://localhost:9200
 - **Kibana Dashboard:** http://localhost:5601
 
+---
+
 ## 🗄️ Estructura del Proyecto
 
 ```
