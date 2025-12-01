@@ -1,14 +1,38 @@
 import { useState, useEffect } from 'react'
-import { MessageSquare, Eye, Clock, Tag, TrendingUp, Sparkles } from 'lucide-react'
+import { MessageSquare, Eye, Clock, Tag, TrendingUp, Sparkles, Search, X, Filter } from 'lucide-react'
 
 const ThreadList = ({ onSelectThread }) => {
   const [threads, setThreads] = useState([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
+  
+  const [searchInput, setSearchInput] = useState('') 
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedLanguage, setSelectedLanguage] = useState('')
+  const [selectedTags, setSelectedTags] = useState([])
+  const [showFilters, setShowFilters] = useState(false)
+
+  const availableTags = ['grammar', 'beginner', 'intermediate', 'vocabulary', 'pronunciation', 'verbs', 'subjunctive', 'past-tenses', 'cases', 'word-order', 'culture']
+  
+  const languages = [
+    { code: '', name: 'Todos los idiomas' },
+    { code: 'es', name: 'Español', flag: '🇪🇸' },
+    { code: 'fr', name: 'Francés', flag: '🇫🇷' },
+    { code: 'de', name: 'Alemán', flag: '🇩🇪' },
+    { code: 'en', name: 'Inglés', flag: '🇬🇧' }
+  ]
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchQuery(searchInput)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [searchInput])
 
   useEffect(() => {
     loadThreads()
-  }, [filter])
+  }, [filter, searchQuery, selectedLanguage, selectedTags])
 
   const loadThreads = async () => {
     setLoading(true)
@@ -17,8 +41,36 @@ const ThreadList = ({ onSelectThread }) => {
       
       if (filter === 'trending') {
         url = 'http://localhost:3002/api/threads/trending?limit=30'
-      } else if (filter === 'recent') {
-        url += '&sort=recent'
+        if (selectedLanguage) {
+          url += `&language=${selectedLanguage}`
+        }
+      } else {
+        const params = new URLSearchParams()
+        
+        if (searchQuery.trim()) {
+          params.append('q', searchQuery.trim())
+        }
+        
+        if (selectedLanguage) {
+          params.append('language', selectedLanguage)
+        }
+        
+        if (selectedTags.length > 0) {
+          params.append('tags', selectedTags.join(','))
+        }
+        
+        if (filter === 'recent') {
+          params.append('sort', 'recent')
+        } else if (filter === 'popular') {
+          params.append('sort', 'popular')
+        } else {
+          params.append('sort', 'relevance')
+        }
+        
+        const queryString = params.toString()
+        if (queryString) {
+          url += `&${queryString}`
+        }
       }
       
       const response = await fetch(url)
@@ -72,8 +124,112 @@ const ThreadList = ({ onSelectThread }) => {
         <div className="text-sm text-gray-500">{threads.length} hilos</div>
       </div>
 
-      {/* Filtros */}
-      <div className="flex gap-2">
+      <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Buscar hilos (ej: subjuntivo, verbos, pronunciación...)"
+              className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition-colors"
+            />
+            {searchInput && (
+              <button
+                onClick={() => {
+                  setSearchInput('')
+                  setSearchQuery('')
+                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-4 h-4 text-gray-400" />
+              </button>
+            )}
+          </div>
+          
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={`flex items-center gap-2 px-4 py-3 rounded-lg font-semibold transition-colors ${
+              showFilters || selectedLanguage || selectedTags.length > 0
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            <Filter className="w-5 h-5" />
+            Filtros
+            {(selectedLanguage || selectedTags.length > 0) && (
+              <span className="bg-white text-blue-500 px-2 py-0.5 rounded-full text-xs font-bold">
+                {[selectedLanguage && 1, selectedTags.length].filter(Boolean).reduce((a, b) => a + b, 0)}
+              </span>
+            )}
+          </button>
+        </div>
+
+        {showFilters && (
+          <div className="mt-4 pt-4 border-t border-gray-200 space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Idioma
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => setSelectedLanguage(lang.code === selectedLanguage ? '' : lang.code)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+                      selectedLanguage === lang.code
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {lang.flag && <span className="text-lg">{lang.flag}</span>}
+                    {lang.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Tags
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {availableTags.map((tag) => (
+                  <button
+                    key={tag}
+                    onClick={() => {
+                      setSelectedTags(prev =>
+                        prev.includes(tag)
+                          ? prev.filter(t => t !== tag)
+                          : [...prev, tag]
+                      )
+                    }}
+                    className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-semibold transition-colors ${
+                      selectedTags.includes(tag)
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Tag className="w-3 h-3" />
+                    {tag}
+                  </button>
+                ))}
+              </div>
+              {selectedTags.length > 0 && (
+                <button
+                  onClick={() => setSelectedTags([])}
+                  className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+                >
+                  Limpiar tags
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-wrap gap-2">
         <button
           onClick={() => setFilter('all')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
@@ -107,9 +263,64 @@ const ThreadList = ({ onSelectThread }) => {
           <Clock className="w-4 h-4" />
           Recientes
         </button>
+        <button
+          onClick={() => setFilter('popular')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ${
+            filter === 'popular'
+              ? 'bg-purple-500 text-white'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          <MessageSquare className="w-4 h-4" />
+          Populares
+        </button>
       </div>
 
-      {/* Lista de hilos */}
+      {(searchQuery || selectedLanguage || selectedTags.length > 0) && (
+        <div className="flex flex-wrap items-center gap-2 text-sm">
+          <span className="text-gray-600 font-medium">Filtros activos:</span>
+          {searchQuery && (
+            <span className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+              "{searchQuery}"
+              <button onClick={() => {
+                setSearchInput('')
+                setSearchQuery('')
+              }} className="hover:text-blue-900">
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          )}
+          {selectedLanguage && (
+            <span className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+              {languages.find(l => l.code === selectedLanguage)?.flag} {languages.find(l => l.code === selectedLanguage)?.name}
+              <button onClick={() => setSelectedLanguage('')} className="hover:text-blue-900">
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          )}
+          {selectedTags.map(tag => (
+            <span key={tag} className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+              <Tag className="w-3 h-3" />
+              {tag}
+              <button onClick={() => setSelectedTags(prev => prev.filter(t => t !== tag))} className="hover:text-blue-900">
+                <X className="w-3 h-3" />
+              </button>
+            </span>
+          ))}
+          <button
+            onClick={() => {
+              setSearchInput('')
+              setSearchQuery('')
+              setSelectedLanguage('')
+              setSelectedTags([])
+            }}
+            className="text-blue-600 hover:text-blue-700 font-medium underline"
+          >
+            Limpiar todo
+          </button>
+        </div>
+      )}
+
       {threads.length === 0 ? (
         <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
           <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-3" />

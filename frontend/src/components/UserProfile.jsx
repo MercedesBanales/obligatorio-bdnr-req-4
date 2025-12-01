@@ -62,7 +62,6 @@ const UserProfile = ({ userId, userName, onClose }) => {
 
   return (
     <div className="space-y-6">
-      {/* Header con botón cerrar */}
       <div className="flex items-center justify-between pb-4 border-b border-gray-200">
         <div className="flex items-center gap-3">
           <div className="p-3 bg-blue-500 rounded-lg">
@@ -83,7 +82,6 @@ const UserProfile = ({ userId, userName, onClose }) => {
         )}
       </div>
 
-      {/* Estadísticas principales */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 border border-blue-200">
           <div className="flex items-center gap-2 mb-2">
@@ -122,7 +120,6 @@ const UserProfile = ({ userId, userName, onClose }) => {
         </div>
       </div>
 
-      {/* Cursos inscritos */}
       {userData.courses && userData.courses.length > 0 && (
         <div className="bg-white rounded-xl p-5 border border-gray-200">
           <div className="flex items-center gap-2 mb-4">
@@ -146,7 +143,6 @@ const UserProfile = ({ userId, userName, onClose }) => {
         </div>
       )}
 
-      {/* Skills con dificultades */}
       {userData.struggles && userData.struggles.length > 0 && (
         <div className="bg-white rounded-xl p-5 border border-gray-200">
           <div className="flex items-center gap-2 mb-4">
@@ -170,7 +166,6 @@ const UserProfile = ({ userId, userName, onClose }) => {
         </div>
       )}
 
-      {/* Red social */}
       <div className="bg-white rounded-xl p-5 border border-gray-200">
         <div className="flex items-center gap-2 mb-4">
           <Users className="w-5 h-5 text-violet-600" />
@@ -186,7 +181,6 @@ const UserProfile = ({ userId, userName, onClose }) => {
         </div>
       </div>
 
-      {/* Mensaje si no hay datos adicionales */}
       {(!userData.courses || userData.courses.length === 0) && 
        (!userData.struggles || userData.struggles.length === 0) && (
         <div className="bg-gray-50 rounded-xl p-8 text-center border border-gray-200">

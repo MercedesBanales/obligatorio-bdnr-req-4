@@ -3,13 +3,12 @@ import Header from './components/Header'
 import Navigation from './components/Navigation'
 import Modal from './components/Modal'
 
-// Componentes de Recomendaciones (Neo4j)
 import Stats from './components/Stats'
 import UsersList from './components/UsersList'
 import Recommendations from './components/Recommendations'
 import Courses from './components/Courses'
 
-// Componentes de Foros (Elasticsearch)
+import ForumStats from './components/ForumStats'
 import ThreadList from './components/ThreadList'
 import ThreadDetail from './components/ThreadDetail'
 
@@ -19,14 +18,12 @@ function App() {
   const [activeSection, setActiveSection] = useState('recommendations')
   const [loading, setLoading] = useState(true)
   
-  // Estado de Recomendaciones
   const [stats, setStats] = useState(null)
   const [users, setUsers] = useState([])
   const [courses, setCourses] = useState([])
   const [selectedUser, setSelectedUser] = useState(null)
   const [isRecommendationsModalOpen, setIsRecommendationsModalOpen] = useState(false)
   
-  // Estado de Foros
   const [selectedThreadId, setSelectedThreadId] = useState(null)
 
   useEffect(() => {
@@ -116,14 +113,17 @@ function App() {
           )}
           
           {activeSection === 'forum' && (
-            <div>
+            <div className="space-y-6">
               {selectedThreadId ? (
                 <ThreadDetail 
                   threadId={selectedThreadId}
                   onBack={handleBackToThreads}
                 />
               ) : (
-                <ThreadList onSelectThread={handleSelectThread} />
+                <>
+                  <ForumStats />
+                  <ThreadList onSelectThread={handleSelectThread} />
+                </>
               )}
             </div>
           )}
