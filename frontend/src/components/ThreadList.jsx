@@ -80,9 +80,7 @@ const ThreadList = ({ onSelectThread }) => {
       }
       
       const data = await response.json()
-      
-      console.log('Threads data received:', data)
-      
+            
       if (data.success) {
         setThreads(data.threads || [])
       } else {
@@ -118,7 +116,6 @@ const ThreadList = ({ onSelectThread }) => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold text-gray-800">Foros y Comunidad</h2>
         <div className="text-sm text-gray-500">{threads.length} hilos</div>

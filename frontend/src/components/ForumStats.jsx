@@ -142,7 +142,6 @@ const ForumStats = () => {
 
   return (
     <div className="space-y-8">
-      {/* Estadísticas por Idioma */}
       <div className="space-y-4">
         <div className="flex items-center gap-3 mb-2">
           <Globe className="w-6 h-6 text-blue-600" />
@@ -182,7 +181,6 @@ const ForumStats = () => {
         )}
       </div>
 
-      {/* Top Tags Más Utilizados */}
       <div className="space-y-4">
         <div className="flex items-center gap-3 mb-2">
           <Tag className="w-6 h-6 text-purple-600" />
